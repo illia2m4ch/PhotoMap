@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation.xml"
+    app:startDestination="@id/photos">
+
+    <fragment
+        android:id="@+id/photos"
+        android:name="com.ilya.photomap.ui.screens.main.photos.PhotosFragment"
+        android:label="@string/photos"
+        tools:layout="@layout/fragment_photos" />
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.ilya.photomap.ui.screens.main.map.MapFragment"
+        android:label="@string/map"
+        tools:layout="@layout/fragment_map" />
+</navigation>

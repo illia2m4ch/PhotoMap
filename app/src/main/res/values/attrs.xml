@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorDefault" format="color"/>
+    <attr name="colorAdditional" format="color"/>
+    <attr name="colorBackground" format="color"/>
+    <attr name="colorCard" format="color"/>
+
+    <attr name="fontFamilyDefault" format="reference"/>
+    <attr name="fontFamilyBold" format="reference"/>
+</resources>

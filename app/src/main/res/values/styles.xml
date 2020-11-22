@@ -1,0 +1,93 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Colors accents -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorDefault">@color/gray_11</item>
+        <item name="colorSecondary">@color/gray_99</item>
+        <item name="colorAdditional">@color/gray_cc</item>
+
+        <item name="colorBackground">@color/backgroundColor</item>
+        <item name="colorCard">@android:color/white</item>
+
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="fontFamilyDefault">@font/montserrat_regular</item>
+        <item name="fontFamilyBold">@font/montserrat_semi_bold</item>
+    </style>
+
+    <style name="Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="titleTextAppearance">@style/ToolbarTitle</item>
+        <item name="contentInsetStartWithNavigation">8dp</item>
+        <item name="contentInsetStart">8dp</item>
+    </style>
+
+    <style name="ToolbarTitle">
+        <item name="fontFamily">?fontFamilyBold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="NavigationMenu" parent="Widget.Design.NavigationView">
+        <item name="itemTextAppearance">@style/MenuItemText</item>
+        <item name="itemIconTint">@color/menu_item_icon_color</item>
+        <item name="itemIconPadding">16dp</item>
+    </style>
+
+    <style name="MenuItemText">
+        <item name="fontFamily">?fontFamilyBold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeColor">@color/input_box_stroke_color</item>
+        <item name="android:textColorHint">?colorSecondary</item>
+        <item name="endIconTint">?colorSecondary</item>
+    </style>
+
+    <style name="TextInput">
+        <item name="fontFamily">?fontFamilyBold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="fontFamily">?fontFamilyBold</item>
+    </style>
+
+    <style name="Button.Stroke" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="fontFamily">?fontFamilyBold</item>
+
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">@color/colorAccent</item>
+    </style>
+
+    <style name="Button.Accent">
+        <item name="backgroundTint">@color/colorAccent</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="tint">@android:color/white</item>
+    </style>
+
+    <style name="TextTitle">
+        <item name="fontFamily">?fontFamilyBold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?colorDefault</item>
+    </style>
+
+    <style name="TextDescription">
+        <item name="fontFamily">?fontFamilyDefault</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?colorDefault</item>
+    </style>
+
+</resources>
