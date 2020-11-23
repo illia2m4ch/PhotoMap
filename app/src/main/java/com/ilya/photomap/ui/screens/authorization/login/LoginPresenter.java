@@ -13,6 +13,8 @@ import com.ilya.photomap.data.network.model.SignUserInDTO;
 import com.ilya.photomap.data.network.model.SignUserOutDTO;
 import com.ilya.photomap.ui.base.BasePresenter;
 import com.ilya.photomap.ui.base.UIState;
+import com.ilya.photomap.util.AppUtil;
+import com.ilya.photomap.util.ValidationUtil;
 
 import java.io.IOException;
 
@@ -36,12 +38,10 @@ public class LoginPresenter<T extends LoginView> extends BasePresenter<T> {
     public void login(@NonNull String login, @NonNull String password) {
 
         // validate email and password
-        if (TextUtils.isEmpty(login)) {
-            getView().showMessage(R.string.empty_login);
-            return;
-        }
-        if (TextUtils.isEmpty(password)) {
-            getView().showMessage(R.string.empty_password);
+        // validate email and password
+        int message = ValidationUtil.checkLoginAndPassword(login, password);
+        if (message != ValidationUtil.SUCCESS) {
+            getView().showMessage(message);
             return;
         }
 

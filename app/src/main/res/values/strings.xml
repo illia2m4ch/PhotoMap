@@ -38,4 +38,9 @@
     <string name="comment_deleted">Комментарий удален</string>
     <string name="start_typing">Начните писать</string>
     <string name="click_to_open">Нажмите, чтобы открыть</string>
+    <string name="login_min_length">Логин должен содержать минимум 4 символа</string>
+    <string name="login_max_length">Логин не должен быть длинее 32 символов</string>
+    <string name="invalid_login">Указан неверный логин</string>
+    <string name="password_min_length">Пароль должен содержать минимум 8 символов</string>
+    <string name="password_max_length">Логин не должен быть длинее 500 символов</string>
 </resources>
