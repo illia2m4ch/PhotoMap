@@ -23,6 +23,6 @@ P.S. Maybe one day the Dagger 2 library will appear here :)
 <p>
   <img src="https://github.com/ilyadam/PhotoMap/blob/master/images/1.jpg" width="400">
   <img src="https://github.com/ilyadam/PhotoMap/blob/master/images/2.jpg" width="400">
-  <img src="https://github.com/ilyadam/PhotoMap/blob/master/images/3.jpg" width="400">
+  <img src="https://github.com/ilyadam/PhotoMap/blob/master/images/5.jpg" width="400">
   <img src="https://github.com/ilyadam/PhotoMap/blob/master/images/4.jpg" width="400">
 </p>
