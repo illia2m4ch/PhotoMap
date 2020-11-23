@@ -13,13 +13,14 @@ public class PhotoOutDTO {
     public double lat;
     public double lng;
 
-    public Photo convertToEntity() {
+    public Photo convertToEntity(String userLogin) {
         Photo photo = new Photo();
         photo.id = id;
         photo.url = url;
         photo.date = date;
         photo.latitude = lat;
         photo.longitude = lng;
+        photo.userLogin = userLogin;
 
         return photo;
     }

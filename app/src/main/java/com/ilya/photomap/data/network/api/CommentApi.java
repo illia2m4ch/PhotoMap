@@ -4,6 +4,7 @@ import com.ilya.photomap.data.network.model.CommentInDTO;
 import com.ilya.photomap.data.network.model.PhotoInDTO;
 import com.ilya.photomap.data.network.model.SignUserInDTO;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
@@ -32,7 +33,7 @@ public interface CommentApi {
             @Body CommentInDTO comment);
 
     @DELETE("image/{imageId}/comment/{id}")
-    Single<ResponseBody> deleteComment(
+    Completable deleteComment(
             @Header("Access-Token") String token,
             @Path("imageId") int imageId,
             @Path("id") int id);

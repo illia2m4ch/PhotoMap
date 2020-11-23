@@ -61,6 +61,7 @@ public class PhotoRepository {
     private final ImageApi imageApi;
 
     private final String token;
+    private final String login;
 
     public PhotoRepository() {
         AppDatabase db = AppDatabase.getInstance();
@@ -68,6 +69,7 @@ public class PhotoRepository {
         imageApi = App.getServerService().getImageApi();
 
         token = App.getToken();
+        login = App.getLogin();
     }
 
     public Single<List<Photo>> loadPhotos(int page, boolean saveToDatabase) {
@@ -76,18 +78,19 @@ public class PhotoRepository {
                 // Mapping responseBody to list of items
                 .map(responseBody -> {
                     List<PhotoOutDTO> photosOut = ResponseUtil.parseData(responseBody, new TypeToken<List<PhotoOutDTO>>(){}.getType());
-                    return ListUtil.map(photosOut, PhotoOutDTO::convertToEntity);
+                    return ListUtil.map(photosOut, dto -> dto.convertToEntity(login));
                 });
         // Inserting new photos to database
         if (saveToDatabase) request = request.doAfterSuccess(photos -> Observable.combineLatest(
                         Observable.just(photos),
-                        photoDao.getIds().toObservable(), // Getting all existing photos in database (ids)
+                        photoDao.getIds(login).toObservable(), // Getting all existing photos in database (ids)
                         (serverComments, databaseCommentsIds) -> {
                             List<Photo> result = new ArrayList<>();
 
                             for (Photo photo : serverComments) {
                                 if (databaseCommentsIds.contains(photo.id)) continue;
                                 result.add(photo);
+                                Log.d("MY_TAG", "photo " + photo.id + " will be inserted");
                             }
 
                             return result;
@@ -97,7 +100,7 @@ public class PhotoRepository {
                         .subscribe());
 
         // Load data from db if error
-        return request.onErrorResumeNext(photoDao.getAll(page)
+        return request.onErrorResumeNext(photoDao.getAll(login, page)
                 .flatMap(photos -> {
                     if (photos.size() == 0 && page == 0) return Single.error(new RuntimeException("No data is available, please, refresh the page"));
                     return Single.just(photos);
@@ -111,14 +114,12 @@ public class PhotoRepository {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<ResponseBody> deletePhoto(int id) {
+    public Completable deletePhoto(int id) {
         return imageApi.deleteImage(token, id)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doAfterSuccess(responseBody -> Single.just(id)
-                        .subscribeOn(Schedulers.io())
-                        .flatMapCompletable(integer -> photoDao.delete(id))
-                        .subscribe()); // delete photo from local database
+                .andThen(photoDao.delete(id))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 }

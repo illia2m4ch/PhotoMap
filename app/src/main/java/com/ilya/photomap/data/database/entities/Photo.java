@@ -8,6 +8,9 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import com.ilya.photomap.data.network.model.PhotoInDTO;
+import com.ilya.photomap.data.network.model.PhotoOutDTO;
+
 @Entity(tableName = "photo")
 public class Photo implements Parcelable {
 
@@ -17,6 +20,7 @@ public class Photo implements Parcelable {
     public long date;
     public double latitude;
     public double longitude;
+    public String userLogin;
 
     public Photo() {
         // Required empty constructor
@@ -28,6 +32,7 @@ public class Photo implements Parcelable {
         date = in.readLong();
         latitude = in.readLong();
         longitude = in.readLong();
+        userLogin = in.readString();
     }
 
     public static final Creator<Photo> CREATOR = new Creator<Photo>() {
@@ -54,5 +59,6 @@ public class Photo implements Parcelable {
         dest.writeLong(date);
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
+        dest.writeString(userLogin);
     }
 }

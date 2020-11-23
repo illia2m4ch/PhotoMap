@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Single;
+import io.reactivex.functions.Action;
 
 /**
  * Presenter for Main Activity
@@ -70,7 +71,7 @@ public class PhotosPresenter<T extends PhotosView> extends BasePresenter<T> {
 
     public void deletePhoto(int idPhoto, int position) {
         getCompositeDisposable().add(repository.deletePhoto(idPhoto)
-                .subscribe(responseBody -> {
+                .subscribe(() -> {
                     if (!isViewAttached()) return;
 
                     getView().deletePhoto(position);

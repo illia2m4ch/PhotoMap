@@ -136,6 +136,6 @@ public class MapFragment extends BaseFragment implements MapView, OnMapReadyCall
 
     @Override
     public void showMessage(int resId) {
-        showSnackbar(resId);
+        if (isVisible()) showSnackbar(resId);
     }
 }

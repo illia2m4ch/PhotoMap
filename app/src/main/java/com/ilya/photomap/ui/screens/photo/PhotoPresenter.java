@@ -87,7 +87,7 @@ public class PhotoPresenter<T extends PhotoView> extends BasePresenter<T> {
 
     public void deleteComment(int idPhoto, int position) {
         getCompositeDisposable().add(repository.deleteComment(idPhoto)
-                .subscribe(responseBody -> {
+                .subscribe(() -> {
                     if (!isViewAttached()) return;
 
                     getView().deleteComment(position);

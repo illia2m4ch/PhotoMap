@@ -1,5 +1,7 @@
 package com.ilya.photomap.repository;
 
+import android.util.Log;
+
 import com.google.gson.reflect.TypeToken;
 import com.ilya.photomap.App;
 import com.ilya.photomap.data.database.AppDatabase;
@@ -14,9 +16,12 @@ import com.ilya.photomap.util.ResponseUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
@@ -50,7 +55,7 @@ public class CommentRepository {
                 // Mapping responseBody to list of items
                 .map(responseBody -> {
                     List<CommentOutDTO> commentsOut = ResponseUtil.parseData(responseBody, new TypeToken<List<CommentOutDTO>>(){}.getType());
-                    return ListUtil.map(commentsOut, input -> input.convertToEntity(photoId));
+                    return ListUtil.map(commentsOut, dto -> dto.convertToEntity(photoId));
                 })
                 // Inserting new comments to database
                 .doAfterSuccess(comments -> Observable.combineLatest(
@@ -79,20 +84,17 @@ public class CommentRepository {
     }
 
     public Single<ResponseBody> addComment(CommentInDTO comment) {
-
         return commentApi.leaveComment(token, photoId, comment)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<ResponseBody> deleteComment(int id) {
+    public Completable deleteComment(int id) {
         return commentApi.deleteComment(token, photoId, id)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doAfterSuccess(responseBody -> Single.just(id)
-                        .subscribeOn(Schedulers.io())
-                        .flatMapCompletable(integer -> commentDao.delete(id))
-                        .subscribe()); // delete comment from local database
+                .andThen(commentDao.delete(id))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 }

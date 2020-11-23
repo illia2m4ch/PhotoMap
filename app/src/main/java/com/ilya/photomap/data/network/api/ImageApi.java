@@ -2,6 +2,7 @@ package com.ilya.photomap.data.network.api;
 
 import com.ilya.photomap.data.network.model.PhotoInDTO;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
@@ -24,6 +25,6 @@ public interface ImageApi {
     Single<ResponseBody> uploadImage(@Header("Access-Token") String token, @Body PhotoInDTO image);
 
     @DELETE("image/{id}")
-    Single<ResponseBody> deleteImage(@Header("Access-Token") String token, @Path("id") int id);
+    Completable deleteImage(@Header("Access-Token") String token, @Path("id") int id);
 
 }

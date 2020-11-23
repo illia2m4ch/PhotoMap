@@ -110,7 +110,7 @@ public class PhotosFragment extends BaseFragment implements PhotosView {
 
     @Override
     public void showMessage(int resId) {
-        showSnackbar(resId);
+        if (isVisible()) showSnackbar(resId);
     }
 
     @Override

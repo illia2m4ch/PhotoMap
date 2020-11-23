@@ -16,11 +16,11 @@ import io.reactivex.Single;
 @Dao
 public interface PhotoDao {
 
-    @Query("SELECT * FROM photo order by date desc limit :page * 20, 20")
-    Single<List<Photo>> getAll(int page);
+    @Query("SELECT * FROM photo where userLogin = :userLogin order by date desc limit :page * 20, 20")
+    Single<List<Photo>> getAll(String userLogin, int page);
 
-    @Query("SELECT id FROM photo")
-    Single<List<Integer>> getIds();
+    @Query("SELECT id FROM photo where userLogin = :userLogin")
+    Single<List<Integer>> getIds(String userLogin);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insertAll(List<Photo> photos);
