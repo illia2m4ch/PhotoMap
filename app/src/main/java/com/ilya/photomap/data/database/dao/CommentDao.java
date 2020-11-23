@@ -2,6 +2,7 @@ package com.ilya.photomap.data.database.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.ilya.photomap.data.database.entities.Comment;
@@ -21,7 +22,7 @@ public interface CommentDao {
     @Query("SELECT id FROM comment")
     Single<List<Integer>> getIds();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insertAll(List<Comment> comments);
 
     @Query("delete from comment")

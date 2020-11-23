@@ -50,17 +50,11 @@ public class MapPresenter<T extends MapView> extends BasePresenter<T> {
                     if (!isViewAttached()) return;
 
                     getView().setUIState(UIState.CONTENT);
-                    List<MarkerOptions> markers = ListUtil.map(photos, photo -> {
-                        LatLng coordinates = new LatLng(photo.latitude, photo.longitude);
-                        return new MarkerOptions()
-                                .position(coordinates)
-                                .title(DateUtil.getFormattedDate(photo.date));
-                    });
 
                     if (photos.size() == 0) hasMorePhotos = false;
                     else {
                         page++;
-                        getView().displayMarkers(markers);
+                        getView().displayMarkers(photos);
                     }
                     isLoading = false;
 

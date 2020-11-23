@@ -11,7 +11,7 @@ import io.reactivex.Single;
 
 public interface MapView extends BaseView, InfoView {
 
-    void displayMarkers(List<MarkerOptions> markers);
+    void displayMarkers(List<Photo> photos);
     void refreshMarkers(boolean saveToDatabase);
 
 }

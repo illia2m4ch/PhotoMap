@@ -3,6 +3,7 @@ package com.ilya.photomap.data.database.dao;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.ilya.photomap.data.database.entities.Photo;
@@ -21,7 +22,7 @@ public interface PhotoDao {
     @Query("SELECT id FROM photo")
     Single<List<Integer>> getIds();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insertAll(List<Photo> photos);
 
     @Query("delete from photo")

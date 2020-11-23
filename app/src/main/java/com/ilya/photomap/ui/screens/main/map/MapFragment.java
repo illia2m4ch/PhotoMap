@@ -1,5 +1,7 @@
 package com.ilya.photomap.ui.screens.main.map;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,16 +11,23 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ilya.photomap.R;
 import com.ilya.photomap.data.database.entities.Photo;
@@ -26,6 +35,11 @@ import com.ilya.photomap.ui.base.BaseFragment;
 import com.ilya.photomap.ui.base.UIState;
 import com.ilya.photomap.ui.screens.main.photos.PhotosPresenter;
 import com.ilya.photomap.ui.screens.main.photos.PhotosView;
+import com.ilya.photomap.ui.screens.photo.PhotoActivity;
+import com.ilya.photomap.util.AppUtil;
+import com.ilya.photomap.util.Constants;
+import com.ilya.photomap.util.DateUtil;
+import com.ilya.photomap.util.ListUtil;
 
 import java.util.List;
 
@@ -79,15 +93,40 @@ public class MapFragment extends BaseFragment implements MapView, OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+
+        map.setOnInfoWindowClickListener(marker -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(Constants.PHOTO_KEY, (Photo) marker.getTag());
+            open(PhotoActivity.class, bundle, false);
+        });
+
         presenter.loadMarkers();
     }
 
     @Override
-    public void displayMarkers(List<MarkerOptions> markers) {
-        LatLng latLng = markers.get(0).getPosition();
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5f));
+    public void displayMarkers(List<Photo> photos) {
 
-        for (MarkerOptions marker : markers) map.addMarker(marker);
+        ListUtil.map(photos, photo -> {
+            LatLng coordinates = new LatLng(photo.latitude, photo.longitude);
+            MarkerOptions marker = new MarkerOptions()
+                    .position(coordinates)
+                    .title(DateUtil.getFormattedDate(photo.date))
+                    .snippet(getString(R.string.click_to_open));
+
+            AppUtil.uploadPhotoAsync(photo.url, getContext(), new CustomTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                    marker.icon(BitmapDescriptorFactory.fromBitmap(resource));
+                    Marker result = map.addMarker(marker);
+                    result.setTag(photo);
+                }
+
+                @Override
+                public void onLoadCleared(@Nullable Drawable placeholder) { }
+            });
+
+            return marker;
+        });
     }
 
     @Override

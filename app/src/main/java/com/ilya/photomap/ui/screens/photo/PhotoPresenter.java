@@ -31,7 +31,6 @@ public class PhotoPresenter<T extends PhotoView> extends BasePresenter<T> {
     }
 
     public void loadComments() {
-        Log.d("MY_TAG", "load comments");
         if (isLoading) return;
         isLoading = true;
 
