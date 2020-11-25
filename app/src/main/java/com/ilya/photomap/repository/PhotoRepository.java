@@ -90,7 +90,6 @@ public class PhotoRepository {
                             for (Photo photo : serverComments) {
                                 if (databaseCommentsIds.contains(photo.id)) continue;
                                 result.add(photo);
-                                Log.d("MY_TAG", "photo " + photo.id + " will be inserted");
                             }
 
                             return result;
