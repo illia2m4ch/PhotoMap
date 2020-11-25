@@ -119,6 +119,10 @@ public class MainActivity extends BaseActivity implements MainView {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        // Fragments
+        photosFragment.setRetainInstance(true);
+        mapFragment.setRetainInstance(true);
+
         // Adding all fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
