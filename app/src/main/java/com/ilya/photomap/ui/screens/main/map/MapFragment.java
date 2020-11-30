@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ import com.ilya.photomap.util.Constants;
 import com.ilya.photomap.util.DateUtil;
 import com.ilya.photomap.util.ListUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -56,6 +58,7 @@ public class MapFragment extends BaseFragment implements MapView, OnMapReadyCall
      * Google map
      */
     GoogleMap map;
+    SparseArray<Marker> markers = new SparseArray<>();
 
     public MapFragment() {
         // Required empty public constructor
@@ -106,7 +109,7 @@ public class MapFragment extends BaseFragment implements MapView, OnMapReadyCall
     @Override
     public void displayMarkers(List<Photo> photos) {
 
-        ListUtil.map(photos, photo -> {
+        for (Photo photo : photos) {
             LatLng coordinates = new LatLng(photo.latitude, photo.longitude);
             MarkerOptions marker = new MarkerOptions()
                     .position(coordinates)
@@ -119,19 +122,27 @@ public class MapFragment extends BaseFragment implements MapView, OnMapReadyCall
                     marker.icon(BitmapDescriptorFactory.fromBitmap(resource));
                     Marker result = map.addMarker(marker);
                     result.setTag(photo);
+                    markers.put(photo.id, result);
                 }
 
                 @Override
                 public void onLoadCleared(@Nullable Drawable placeholder) { }
             });
-
-            return marker;
-        });
+        }
     }
 
     @Override
     public void refreshMarkers(boolean saveToDatabase) {
         presenter.refreshMarkers(saveToDatabase);
+    }
+
+    @Override
+    public void removeMarker(int idPhoto) {
+        Marker marker = markers.get(idPhoto);
+        if (marker == null) return;
+
+        marker.remove();
+        markers.remove(idPhoto);
     }
 
     @Override

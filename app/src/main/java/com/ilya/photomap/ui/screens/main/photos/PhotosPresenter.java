@@ -68,19 +68,4 @@ public class PhotosPresenter<T extends PhotosView> extends BasePresenter<T> {
         hasMorePhotos = true;
         loadPhotos(saveToDatabase);
     }
-
-    public void deletePhoto(int idPhoto, int position) {
-        getCompositeDisposable().add(repository.deletePhoto(idPhoto)
-                .subscribe(() -> {
-                    if (!isViewAttached()) return;
-
-                    getView().deletePhoto(position);
-                    getView().showMessage(R.string.photo_deleted);
-                }, throwable -> {
-                    if (!isViewAttached()) return;
-
-                    getView().showMessage(R.string.error);
-                })
-        );
-    }
 }

@@ -23,7 +23,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.Single;
 
 public class PhotosFragment extends BaseFragment implements PhotosView {
 
@@ -58,7 +57,7 @@ public class PhotosFragment extends BaseFragment implements PhotosView {
 
         // Views
         photosAdapter.setOnDeleteItemListener((photo, position) -> {
-            presenter.deletePhoto(photo.id, position);
+            ((MainActivity) getActivity()).deletePhoto(photo.id, position);
         });
         photosAdapter.setOnClickItemListener(photo -> {
             Bundle bundle = new Bundle();

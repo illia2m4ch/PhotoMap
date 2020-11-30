@@ -211,9 +211,20 @@ public class MainActivity extends BaseActivity implements MainView {
      * That's not so brilliant solution maybe in next iterations of refactoring it will be optimized :)
      */
     @Override
-    public void notifyUpdatePhotos() {
+    public void notifyPhotosUpdated() {
         photosFragment.refreshPhotos(true);
         mapFragment.refreshMarkers(false);
+    }
+
+    @Override
+    public void deletePhoto(int id, int position) {
+        presenter.deletePhoto(id, position);
+    }
+
+    @Override
+    public void notifyPhotoDeleted(int id, int position) {
+        photosFragment.deletePhoto(position);
+        mapFragment.removeMarker(id);
     }
 
     @Override

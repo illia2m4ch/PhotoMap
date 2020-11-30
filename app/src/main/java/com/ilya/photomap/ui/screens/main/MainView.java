@@ -13,6 +13,8 @@ public interface MainView extends BaseView, InfoView, RequestPermissionView {
 
     void openAuthorization();
     void openCamera();
-    void notifyUpdatePhotos();
+    void notifyPhotosUpdated();
+    void deletePhoto(int id, int position);
+    void notifyPhotoDeleted(int id, int position);
 
 }

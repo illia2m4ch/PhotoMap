@@ -66,7 +66,22 @@ public class MainPresenter<T extends MainView> extends BasePresenter<T> {
                 .subscribe(responseBody -> {
                     if (!isViewAttached()) return;
                     getView().showMessage(R.string.photo_uploaded);
-                    getView().notifyUpdatePhotos();
+                    getView().notifyPhotosUpdated();
+                }, throwable -> {
+                    if (!isViewAttached()) return;
+
+                    getView().showMessage(R.string.error);
+                })
+        );
+    }
+
+    public void deletePhoto(int id, int position) {
+        getCompositeDisposable().add(repository.deletePhoto(id)
+                .subscribe(() -> {
+                    if (!isViewAttached()) return;
+
+                    getView().notifyPhotoDeleted(id, position);
+                    getView().showMessage(R.string.photo_deleted);
                 }, throwable -> {
                     if (!isViewAttached()) return;
 
