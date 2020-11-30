@@ -66,10 +66,10 @@ public class MainActivity extends BaseActivity implements MainView {
     /**
      * Fragments
      */
-    final PhotosFragment photosFragment = new PhotosFragment();
-    final MapFragment mapFragment = new MapFragment();
+    public static final String TAG_PHOTOS = "photos";
+    public static final String TAG_MAP = "map";
     Fragment currentFragment;
-    int currentFragmentId;
+    int currentFragmentId = -1;
 
     /**
      * Location
@@ -120,14 +120,22 @@ public class MainActivity extends BaseActivity implements MainView {
         toggle.syncState();
 
         // Fragments
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // If fragments have already added
+        if (fragmentManager.findFragmentByTag(TAG_PHOTOS) != null) return;
+
+        PhotosFragment photosFragment = new PhotosFragment();
         photosFragment.setRetainInstance(true);
+
+        MapFragment mapFragment = new MapFragment();
         mapFragment.setRetainInstance(true);
 
         // Adding all fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .add(R.id.fragment, mapFragment).hide(mapFragment)
-                .add(R.id.fragment, photosFragment).hide(photosFragment)
+                .add(R.id.fragment, photosFragment, TAG_PHOTOS).hide(photosFragment)
+                .add(R.id.fragment, mapFragment, TAG_MAP).hide(mapFragment)
+                .runOnCommit(() -> displayFragment(R.id.photos))
                 .commit();
 
         navigation.setNavigationItemSelectedListener(item -> {
@@ -135,8 +143,6 @@ public class MainActivity extends BaseActivity implements MainView {
             displayFragment(id);
             return true;
         });
-
-        displayFragment(R.id.photos);
     }
 
         @Override
@@ -161,15 +167,13 @@ public class MainActivity extends BaseActivity implements MainView {
             return;
         }
 
-        switch (itemId) {
-            case R.id.photos:
-                fragment = photosFragment;
-                titleId = R.string.photos;
-                break;
-            case R.id.map:
-                fragment = mapFragment;
-                titleId = R.string.map;
-                break;
+        if (itemId == R.id.photos) {
+            fragment = getSupportFragmentManager().findFragmentByTag(TAG_PHOTOS);
+            titleId = R.string.photos;
+        }
+        else if (itemId == R.id.map) {
+            fragment = getSupportFragmentManager().findFragmentByTag(TAG_MAP);
+            titleId = R.string.map;
         }
 
         if (fragment != null) {
@@ -179,7 +183,7 @@ public class MainActivity extends BaseActivity implements MainView {
             ft.show(fragment);
             ft.commit();
 
-            if (currentFragmentId != 0) navigation.getMenu().findItem(currentFragmentId).setChecked(false);
+            if (currentFragmentId != -1) navigation.getMenu().findItem(currentFragmentId).setChecked(false);
             navigation.getMenu().findItem(itemId).setChecked(true);
 
             currentFragment = fragment;
@@ -212,8 +216,10 @@ public class MainActivity extends BaseActivity implements MainView {
      */
     @Override
     public void notifyPhotosUpdated() {
-        photosFragment.refreshPhotos(true);
-        mapFragment.refreshMarkers(false);
+        ((PhotosFragment) getSupportFragmentManager().findFragmentByTag(TAG_PHOTOS))
+                .refreshPhotos(true);
+        ((MapFragment) getSupportFragmentManager().findFragmentByTag(TAG_MAP))
+                .refreshMarkers(false);
     }
 
     @Override
@@ -223,8 +229,10 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void notifyPhotoDeleted(int id, int position) {
-        photosFragment.deletePhoto(position);
-        mapFragment.removeMarker(id);
+        ((PhotosFragment) getSupportFragmentManager().findFragmentByTag(TAG_PHOTOS))
+                .deletePhoto(position);
+        ((MapFragment) getSupportFragmentManager().findFragmentByTag(TAG_MAP))
+                .removeMarker(id);
     }
 
     @Override
