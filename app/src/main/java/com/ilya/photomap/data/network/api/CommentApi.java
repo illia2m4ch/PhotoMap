@@ -22,19 +22,16 @@ public interface CommentApi {
 
     @GET("image/{imageId}/comment")
     Single<ResponseBody> getComments(
-            @Header("Access-Token") String token,
             @Path("imageId") int imageId,
             @Query("page") int page);
 
     @POST("image/{imageId}/comment")
     Single<ResponseBody> leaveComment(
-            @Header("Access-Token") String token,
             @Path("imageId") int imageId,
             @Body CommentInDTO comment);
 
     @DELETE("image/{imageId}/comment/{id}")
     Completable deleteComment(
-            @Header("Access-Token") String token,
             @Path("imageId") int imageId,
             @Path("id") int id);
 

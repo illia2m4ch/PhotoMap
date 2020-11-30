@@ -14,6 +14,7 @@ import com.ilya.photomap.data.database.entities.Photo;
 import com.ilya.photomap.ui.adapters.PhotosAdapter;
 import com.ilya.photomap.ui.base.BaseFragment;
 import com.ilya.photomap.ui.base.UIState;
+import com.ilya.photomap.ui.screens.main.MainActivity;
 import com.ilya.photomap.ui.screens.photo.PhotoActivity;
 import com.ilya.photomap.util.Constants;
 

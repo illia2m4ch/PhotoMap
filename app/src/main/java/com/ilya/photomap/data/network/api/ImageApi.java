@@ -19,12 +19,12 @@ import retrofit2.http.Query;
 public interface ImageApi {
 
     @GET("image")
-    Single<ResponseBody> getImages(@Header("Access-Token") String token, @Query("page") int page);
+    Single<ResponseBody> getImages(@Query("page") int page);
 
     @POST("image")
-    Single<ResponseBody> uploadImage(@Header("Access-Token") String token, @Body PhotoInDTO image);
+    Single<ResponseBody> uploadImage(@Body PhotoInDTO image);
 
     @DELETE("image/{id}")
-    Completable deleteImage(@Header("Access-Token") String token, @Path("id") int id);
+    Completable deleteImage(@Path("id") int id);
 
 }

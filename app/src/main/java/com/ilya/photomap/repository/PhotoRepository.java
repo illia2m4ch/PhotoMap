@@ -60,7 +60,6 @@ public class PhotoRepository {
      */
     private final ImageApi imageApi;
 
-    private final String token;
     private final String login;
 
     public PhotoRepository() {
@@ -68,12 +67,11 @@ public class PhotoRepository {
         photoDao = db.photoDao();
         imageApi = App.getServerService().getImageApi();
 
-        token = App.getToken();
         login = App.getLogin();
     }
 
     public Single<List<Photo>> loadPhotos(int page, boolean saveToDatabase) {
-        Single<List<Photo>> request = imageApi.getImages(token, page) // Network request
+        Single<List<Photo>> request = imageApi.getImages(page) // Network request
                 .subscribeOn(Schedulers.io())
                 // Mapping responseBody to list of items
                 .map(responseBody -> {
@@ -108,13 +106,13 @@ public class PhotoRepository {
     }
 
     public Single<ResponseBody> addPhoto(PhotoInDTO photo) {
-        return imageApi.uploadImage(token, photo)
+        return imageApi.uploadImage(photo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Completable deletePhoto(int id) {
-        return imageApi.deleteImage(token, id)
+        return imageApi.deleteImage(id)
                 .subscribeOn(Schedulers.io())
                 .andThen(photoDao.delete(id))
                 .subscribeOn(Schedulers.io())

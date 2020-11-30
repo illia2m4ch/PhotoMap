@@ -37,7 +37,6 @@ public class CommentRepository {
      */
     private final CommentApi commentApi;
 
-    private final String token;
     private final int photoId;
 
     public CommentRepository(int photoId) {
@@ -45,12 +44,11 @@ public class CommentRepository {
         commentDao = db.commentDao();
         commentApi = App.getServerService().getCommentApi();
 
-        token = App.getToken();
         this.photoId = photoId;
     }
 
     public Single<List<Comment>> loadComments(int page) {
-        return commentApi.getComments(token, photoId, page) // Network request
+        return commentApi.getComments(photoId, page) // Network request
                 .subscribeOn(Schedulers.io())
                 // Mapping responseBody to list of items
                 .map(responseBody -> {
@@ -84,13 +82,13 @@ public class CommentRepository {
     }
 
     public Single<ResponseBody> addComment(CommentInDTO comment) {
-        return commentApi.leaveComment(token, photoId, comment)
+        return commentApi.leaveComment(photoId, comment)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Completable deleteComment(int id) {
-        return commentApi.deleteComment(token, photoId, id)
+        return commentApi.deleteComment(photoId, id)
                 .subscribeOn(Schedulers.io())
                 .andThen(commentDao.delete(id))
                 .subscribeOn(Schedulers.io())

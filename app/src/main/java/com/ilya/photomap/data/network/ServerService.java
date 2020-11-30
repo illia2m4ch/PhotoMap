@@ -1,10 +1,24 @@
 package com.ilya.photomap.data.network;
 
+import android.util.Log;
+
+import com.ilya.photomap.App;
 import com.ilya.photomap.data.network.api.AccountApi;
 import com.ilya.photomap.data.network.api.CommentApi;
 import com.ilya.photomap.data.network.api.ImageApi;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.io.IOException;
+
+import okhttp3.Authenticator;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.Route;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -43,15 +57,16 @@ public class ServerService {
     private OkHttpClient createOkHttpClient() {
         final OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
-//        httpClient.addInterceptor(chain -> {
-//            final Request original = chain.request();
-//            final HttpUrl originalHttpUrl = original.url();
-//            final HttpUrl url = originalHttpUrl.newBuilder().build();
-//            final Request.Builder requestBuilder = original.newBuilder()
-//                    .url(url);
-//            final Request request = requestBuilder.build();
-//            return chain.proceed(request);
-//        });
+        httpClient.addInterceptor(chain -> {
+            String token = App.getToken();
+            if (token == null) return chain.proceed(chain.request());
+
+            Request request = chain.request().newBuilder()
+                    .header("Access-Token", token)
+                    .build();
+
+            return chain.proceed(request);
+        });
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.level(HttpLoggingInterceptor.Level.BODY);
